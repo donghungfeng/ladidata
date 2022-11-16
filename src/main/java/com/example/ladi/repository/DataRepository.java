@@ -2,10 +2,9 @@ package com.example.ladi.repository;
 
 import com.example.ladi.model.Data;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
-public interface DataRepository extends JpaRepository<Data, Integer> {
-    List<Data> findAll();
-    Data findAllById(int id);
+@Repository
+public interface DataRepository extends BaseRepository<Data> {
 }
