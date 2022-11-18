@@ -42,11 +42,4 @@ public class DataController {
         return new ResponseEntity<String>(dataService.deleteDataById(id), HttpStatus.OK);
     }
 
-    @CrossOrigin
-    @GetMapping("/getByStatus")
-    public ResponseEntity<List<Data>> getAllByStatus(int status){
-        var datas = dataService.getByStatus(status);
-        return new ResponseEntity<List<Data>>(datas, HttpStatus.OK);
-    }
-
 }

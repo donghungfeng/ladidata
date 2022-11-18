@@ -7,7 +7,6 @@ import com.example.ladi.repository.DataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -20,10 +19,6 @@ public class DataService {
     }
 
     public Data createData(CreateDataRequest createDataRequest){
-
-        long unixTime = Instant.now().getEpochSecond();
-        
-
         Data data = Data.builder()
                 .name(createDataRequest.getName())
                 .phone(createDataRequest.getPhone())
@@ -34,7 +29,7 @@ public class DataService {
                 .ward(createDataRequest.getWard())
                 .formcolor(createDataRequest.getFormcolor())
                 .status(createDataRequest.getStatus())
-                .date(Long.toString(unixTime))
+                .date(createDataRequest.getDate())
                 .source(createDataRequest.getSource())
                 .ipAddress(createDataRequest.getIpAddress())
                 .dateChanged(createDataRequest.getDateChanged())
@@ -97,11 +92,5 @@ public class DataService {
         dataRepository.delete(data);
         return "deleted";
     }
-
-    public List<Data> getByStatus(int status) {
-        List<Data> datas = dataRepository.findAllByStatus(status);
-        return datas;
-    }
-
 
 }
