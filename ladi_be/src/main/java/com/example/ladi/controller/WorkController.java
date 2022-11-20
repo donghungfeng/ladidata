@@ -2,6 +2,7 @@ package com.example.ladi.controller;
 
 import com.example.ladi.controller.reponse.BaseResponse;
 import com.example.ladi.controller.request.CheckOutRequest;
+import com.example.ladi.controller.request.CheckWorkActiveRequest;
 import com.example.ladi.controller.request.CreateWorkRequest;
 import com.example.ladi.model.Work;
 import com.example.ladi.service.BaseService;
@@ -38,5 +39,10 @@ public class WorkController extends BaseController<Work>{
     @GetMapping("getAllActive")
     public BaseResponse getAllIsActive(){
         return workService.getAllActive();
+    }
+
+    @PostMapping("checkWorkActive")
+    public BaseResponse getAllIsActive(@RequestBody CheckWorkActiveRequest checkWorkActiveRequest){
+        return workService.checkWorkActive(checkWorkActiveRequest);
     }
 }

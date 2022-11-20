@@ -2,6 +2,7 @@ package com.example.ladi.service.impl;
 
 import com.example.ladi.controller.reponse.BaseResponse;
 import com.example.ladi.controller.request.CheckOutRequest;
+import com.example.ladi.controller.request.CheckWorkActiveRequest;
 import com.example.ladi.controller.request.CreateWorkRequest;
 import com.example.ladi.controller.request.UpdateWorkRequest;
 import com.example.ladi.dto.AccountDto;
@@ -80,5 +81,18 @@ public class WorkServiceImpl extends BaseServiceImpl<Work> implements WorkServic
             workDtoList.add(workDto);
         }
         return new BaseResponse(200, "OK", workDtoList);
+    }
+
+    @Override
+    public BaseResponse checkWorkActive(CheckWorkActiveRequest checkWorkActive) {
+        Account account = accountRepository.findAllById(checkWorkActive.getNhanVienId());
+        if (account == null){
+            return new BaseResponse(500, "Account Not Found", null);
+        }
+        Work work = workRepository.findAllByIsActiveAndAccount(1, account);
+        AccountDto accountDto = new AccountDto(account.getId(), account.getUserName(), account.getFullName());
+        WorkDto workDto = new WorkDto(work.getId(), work.getTimeIn(), work.getTimeOut(), work.getDonGiao(), work.getDonHoanThanh(), work.getGhiChu(), accountDto);
+        System.out.println(workDto);
+        return new BaseResponse(200, "OK", workDto);
     }
 }
