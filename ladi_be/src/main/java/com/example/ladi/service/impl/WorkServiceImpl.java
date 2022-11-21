@@ -87,12 +87,14 @@ public class WorkServiceImpl extends BaseServiceImpl<Work> implements WorkServic
     public BaseResponse checkWorkActive(CheckWorkActiveRequest checkWorkActive) {
         Account account = accountRepository.findAllById(checkWorkActive.getNhanVienId());
         if (account == null){
-            return new BaseResponse(500, "Account Not Found", null);
+            return new BaseResponse(500, "Account Not Found!", null);
         }
         Work work = workRepository.findAllByIsActiveAndAccount(1, account);
+        if (work == null){
+            return new BaseResponse(500, "NOT ACCOUNT CHECKING!", null);
+        }
         AccountDto accountDto = new AccountDto(account.getId(), account.getUserName(), account.getFullName());
         WorkDto workDto = new WorkDto(work.getId(), work.getTimeIn(), work.getTimeOut(), work.getDonGiao(), work.getDonHoanThanh(), work.getGhiChu(), accountDto);
-        System.out.println(workDto);
         return new BaseResponse(200, "OK", workDto);
     }
 }

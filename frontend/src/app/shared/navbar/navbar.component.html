@@ -30,6 +30,7 @@
           </div>
         </div> -->
       </form>
+      <ng-toggle [value]="checkWorkActive" [color]="{ unchecked: '#939da2', checked: '#f62d51'}" (change) = "triggerWorkActive()"></ng-toggle>
       <ul class="navbar-nav">
         <li class="nav-item">
           <a class="nav-link btn-magnify" href="javascript:void(0)" routerLink="/logiin" >
