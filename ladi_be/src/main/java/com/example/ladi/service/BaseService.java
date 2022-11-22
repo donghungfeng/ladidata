@@ -9,5 +9,5 @@ public interface BaseService<T> {
     public T create(T t);
     public T update(T t) throws NoSuchAlgorithmException;
     public T getById(int id);
-    public String deleteById(T t);
+    public String deleteById(int id);
 }

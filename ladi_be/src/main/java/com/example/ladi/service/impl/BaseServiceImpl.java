@@ -28,7 +28,8 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
     }
 
     @Override
-    public String deleteById(T t){
+    public String deleteById(int id){
+        T t = this.getRepository().findAllById(id);
         this.getRepository().delete(t);
         return "delete success";
     }

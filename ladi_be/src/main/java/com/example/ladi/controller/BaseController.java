@@ -36,7 +36,7 @@ public abstract class BaseController<T> {
     }
 
     @DeleteMapping("deleteById")
-    public BaseResponse deleteById(@RequestBody T t){
-        return new BaseResponse(200, "OK", this.getService().deleteById(t));
+    public BaseResponse deleteById(@RequestParam(name = "id") int id){
+        return new BaseResponse(200, "OK", this.getService().deleteById(id));
     }
 }
