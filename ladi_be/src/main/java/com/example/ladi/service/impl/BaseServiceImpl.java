@@ -3,6 +3,7 @@ package com.example.ladi.service.impl;
 import com.example.ladi.repository.BaseRepository;
 import com.example.ladi.service.BaseService;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public abstract class BaseServiceImpl<T> implements BaseService<T> {
@@ -18,12 +19,19 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
     }
 
     @Override
-    public T update(T t) {
+    public T update(T t) throws NoSuchAlgorithmException {
         return this.getRepository().save(t);
     }
-
     @Override
     public T getById(int id) {
         return this.getRepository().findAllById(id);
     }
+
+    @Override
+    public String deleteById(T t){
+        this.getRepository().delete(t);
+        return "delete success";
+    }
+
+
 }

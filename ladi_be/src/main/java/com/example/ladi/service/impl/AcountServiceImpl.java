@@ -47,4 +47,22 @@ public class AcountServiceImpl extends BaseServiceImpl<Account> implements Acoun
         LoginResponse loginResponse = new LoginResponse(jwtTokenProvider.generateToken(new AccountDetails(account)), account.getId(), account.getUserName(), account.getFullName());
         return new BaseResponse(200, "OK", loginResponse);
     }
+
+    @Override
+    public Account update(Account account) throws NoSuchAlgorithmException {
+        Account account1 = acountRepository.findAllById(account.getId());
+        account1.setFullName(account.getFullName());
+        account1.setEmail(account.getEmail());
+        account1.setAddress(account.getAddress());
+        account1.setPhone(account.getPhone());
+        if (account.getPassWord() != ""){
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(account.getPassWord().getBytes());
+            byte[] digest = md.digest();
+            String myHash = DatatypeConverter.printHexBinary(digest).toUpperCase();
+            account1.setPassWord(myHash);
+        }
+        acountRepository.save(account1);
+        return account1;
+    }
 }
