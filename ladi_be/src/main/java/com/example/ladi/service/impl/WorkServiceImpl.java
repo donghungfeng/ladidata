@@ -4,7 +4,6 @@ import com.example.ladi.controller.reponse.BaseResponse;
 import com.example.ladi.controller.request.CheckOutRequest;
 import com.example.ladi.controller.request.CheckWorkActiveRequest;
 import com.example.ladi.controller.request.CreateWorkRequest;
-import com.example.ladi.controller.request.UpdateWorkRequest;
 import com.example.ladi.dto.AccountDto;
 import com.example.ladi.dto.WorkDto;
 import com.example.ladi.model.Account;

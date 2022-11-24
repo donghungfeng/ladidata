@@ -3,7 +3,7 @@ package com.example.ladi.service.impl;
 import com.example.ladi.controller.reponse.BaseResponse;
 import com.example.ladi.controller.request.AssignJobRequest;
 import com.example.ladi.dto.DataDto;
-import com.example.ladi.dto.WorkAssignDto;
+import com.example.ladi.dto.DataAssginDto;
 import com.example.ladi.model.Account;
 import com.example.ladi.model.Data;
 import com.example.ladi.repository.BaseRepository;
@@ -24,8 +24,8 @@ public class DataServiceImpl extends BaseServiceImpl<Data> implements DataServic
         return dataRepository;
     }
 
-    public List<WorkAssignDto> getByStatus(Integer status, String startDate, String endDate) {
-        List<WorkAssignDto> datas = dataRepository.findAllByStatus(status, startDate, endDate);
+    public List<DataAssginDto> getByStatus(Integer status, String startDate, String endDate) {
+        var datas = dataRepository.findAllByStatus(status, startDate, endDate);
         return datas;
     }
 
