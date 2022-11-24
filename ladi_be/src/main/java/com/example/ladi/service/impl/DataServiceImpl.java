@@ -59,24 +59,24 @@ public class DataServiceImpl extends BaseServiceImpl<Data> implements DataServic
         String bearerToken = getJwtFromRequest(jwt);
         String userName = jwtTokenProvider.getAccountUserNameFromJWT(bearerToken);
         Account account = accountRepository.findByUserName(userName);
-        if (account.getRole().equals("admin")){
+        List<DataDto> dataDtoList = new ArrayList<>();
+        if (account.getRole().equals("admin")) {
             List<Data> dataList = dataRepository.findAllByOrderByIdDesc();
-            List<DataDto> dataDtoList = new ArrayList<>();
+            for (int i = 0; i < dataList.size(); i++) {
+                AccountDto accountDto = new AccountDto(account.getId(), account.getUserName(), account.getFullName());
+                DataDto dataDto = modelMapper.map(dataList.get(i), DataDto.class);
+                dataDto.setAccount(accountDto);
+                dataDtoList.add(dataDto);
+            }
+            return new BaseResponse(200, "OK", dataDtoList);
+        }else {
+            List<Data> dataList = dataRepository.findAllByAccount(account);
             for (int i = 0; i<dataList.size(); i++){
                 AccountDto accountDto = modelMapper.map(dataList.get(i).getAccount(), AccountDto.class);
                 DataDto dataDto = modelMapper.map(dataList.get(i), DataDto.class);
                 dataDto.setAccount(accountDto);
                 dataDtoList.add(dataDto);
             }
-            return new BaseResponse(200, "OK", dataDtoList);
-        }
-        List<Data> dataList = dataRepository.findAllByAccount(account);
-        List<DataDto> dataDtoList = new ArrayList<>();
-        for (int i = 0; i<dataList.size(); i++){
-            AccountDto accountDto = modelMapper.map(dataList.get(i).getAccount(), AccountDto.class);
-            DataDto dataDto = modelMapper.map(dataList.get(i), DataDto.class);
-            dataDto.setAccount(accountDto);
-            dataDtoList.add(dataDto);
         }
         return new BaseResponse(200, "OK", dataDtoList);
     }

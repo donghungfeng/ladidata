@@ -54,26 +54,27 @@ public class WorkServiceImpl extends BaseServiceImpl<Work> implements WorkServic
         String bearerToken = getJwtFromRequest(jwt);
         String userName = jwtTokenProvider.getAccountUserNameFromJWT(bearerToken);
         Account account = accountRepository.findByUserName(userName);
+        List<WorkDto> workDtoList = new ArrayList<>();
         if (account.getRole().equals("admin")){
             List<Work> workList = workRepository.findAllByOrderByIdDesc();
-            List<WorkDto> workDtoList = new ArrayList<>();
             for (int i = 0; i<workList.size(); i++){
                 AccountDto accountDto = modelMapper.map(workList.get(i).getAccount(), AccountDto.class);
                 WorkDto workDto = modelMapper.map(workList.get(i),WorkDto.class);
                 workDto.setAcount(accountDto);
                 workDtoList.add(workDto);
             }
-            return new BaseResponse(200, "OK", workDtoList);
         }
-        List<Work> workList = workRepository.findAllByAccount(account);
-        List<WorkDto> workDtoList = new ArrayList<>();
-        for (int i = 0 ; i<workList.size(); i++){
-            AccountDto accountDto = modelMapper.map(workList.get(i).getAccount(),AccountDto.class);
-            WorkDto workDto = modelMapper.map(workList.get(i),WorkDto.class);
-            workDto.setAcount(accountDto);
-            workDtoList.add(workDto);
+        else{
+            List<Work> workList = workRepository.findAllByAccount(account);
+            for (int i = 0 ; i<workList.size(); i++){
+                AccountDto accountDto = modelMapper.map(workList.get(i).getAccount(),AccountDto.class);
+                WorkDto workDto = modelMapper.map(workList.get(i),WorkDto.class);
+                workDto.setAcount(accountDto);
+                workDtoList.add(workDto);
+            }
         }
         return new BaseResponse(200, "OK", workDtoList);
+
     }
 
     @Override
