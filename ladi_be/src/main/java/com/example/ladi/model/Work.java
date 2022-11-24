@@ -34,6 +34,6 @@ public class Work extends BaseEntity{
     private int isActive;
 
     @ManyToOne
-    @JoinColumn(name = "nhanvienid")
+    @JoinColumn(name = "nhanvienid", nullable = false)
     Account account;
 }

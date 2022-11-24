@@ -13,7 +13,6 @@ import java.security.NoSuchAlgorithmException;
 public abstract class BaseController<T> {
     protected abstract BaseService<T> getService();
 
-    @PreAuthorize("hasAuthority('admin')")
     @GetMapping("getAll")
     public BaseResponse getAll(){
         return new BaseResponse(200, "Lấy dữ liệu thành công!", this.getService().getAll());

@@ -63,6 +63,6 @@ public class Data {
     private Integer staffId;
 
     @ManyToOne
-    @JoinColumn(name = "nhanvienid")
+    @JoinColumn(name = "nhanvienid", nullable = false)
     Account account;
 }
