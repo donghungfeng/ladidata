@@ -4,6 +4,7 @@ import com.example.ladi.configurations.AccountDetails;
 import com.example.ladi.configurations.JwtTokenProvider;
 import com.example.ladi.controller.reponse.BaseResponse;
 import com.example.ladi.controller.reponse.LoginResponse;
+import com.example.ladi.dto.AccountDto;
 import com.example.ladi.model.Account;
 import com.example.ladi.repository.AccountRepository;
 import com.example.ladi.repository.BaseRepository;
@@ -61,6 +62,9 @@ public class AcountServiceImpl extends BaseServiceImpl<Account> implements Acoun
             byte[] digest = md.digest();
             String myHash = DatatypeConverter.printHexBinary(digest).toUpperCase();
             account1.setPassWord(myHash);
+        }
+        if (account.getRole() != null){
+            account1.setRole(account.getRole());
         }
         acountRepository.save(account1);
         return account1;

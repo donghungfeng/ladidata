@@ -119,4 +119,12 @@ public class DataController extends BaseController<Data>{
         }
         else return new BaseResponse(404, "Giá trị rỗng!", null);
     }
+
+    @GetMapping("")
+    public BaseResponse getAllData(@RequestHeader(name = "Authorization") String jwt){
+
+        return dataService.getAllData(jwt);
+    }
+
+
 }

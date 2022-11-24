@@ -1,5 +1,6 @@
 package com.example.ladi.repository;
 
+import com.example.ladi.model.Account;
 import com.example.ladi.model.Data;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,4 +22,6 @@ public interface DataRepository extends BaseRepository<Data> {
         value = "SELECT * FROM data as d WHERE d.date > :startDate AND d.date < :endDate", 
         nativeQuery = true)
     List<Data> findAllByDate( @Param("startDate") String startDate, @Param("endDate") String endDate);
+
+    List<Data> findAllByAccount(Account account);
 }

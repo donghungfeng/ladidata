@@ -10,4 +10,5 @@ import java.util.List;
 public interface WorkRepository extends BaseRepository<Work>{
     List<Work> findAllByIsActive(int isActive);
     Work findAllByIsActiveAndAccount(int isActive, Account account);
+    List<Work> findAllByAccount(Account account);
 }

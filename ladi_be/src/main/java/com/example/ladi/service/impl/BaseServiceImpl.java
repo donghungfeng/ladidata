@@ -10,7 +10,7 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
     protected abstract BaseRepository<T> getRepository();
     @Override
     public List<T> getAll() {
-        return this.getRepository().findAll();
+        return this.getRepository().findAllByOrderByIdDesc();
     }
 
     @Override

@@ -27,8 +27,9 @@ public class WorkController extends BaseController<Work>{
     }
 
     @GetMapping("")
-    public BaseResponse getAllWork(){
-        return workService.getAllWork();
+    public BaseResponse getAllWork(@RequestHeader(name = "Authorization") String jwt){
+
+        return workService.getAllWork(jwt);
     }
 
     @PostMapping("/checkOut")

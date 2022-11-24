@@ -61,4 +61,8 @@ public class Data {
     @JsonProperty("nhanvienid")
     @Column(name = "staffId")
     private Integer staffId;
+
+    @ManyToOne
+    @JoinColumn(name = "nhanvienid")
+    Account account;
 }

@@ -10,4 +10,5 @@ import java.util.List;
 public interface BaseRepository<T> extends JpaRepository<T, Integer>, JpaSpecificationExecutor<T> {
     List<T> findAll();
     T findAllById(int id);
+    List<T> findAllByOrderByIdDesc();
 }

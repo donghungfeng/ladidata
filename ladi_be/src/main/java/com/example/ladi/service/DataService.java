@@ -15,4 +15,5 @@ public interface DataService extends BaseService<Data> {
     public List<Data> getByStatus(Integer status, String startDate, String endDate);
     public List<Data> getByDate(String startDate, String endDate);
     public BaseResponse assignWork(AssignJobRequest request);
+    public BaseResponse getAllData(String jwt);
 }
