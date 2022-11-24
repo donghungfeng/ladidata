@@ -2,20 +2,19 @@ package com.example.ladi.dto;
 
 import javax.persistence.NamedNativeQuery;
 import javax.persistence.SqlResultSetMapping;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.ColumnResult;
 
 @Entity
-@NamedNativeQuery(name = "find_DataAssgnDto",
-                  query = "SELECT d.*, a.username as staffName"
-                  +" FROM data as d"
-                  +" LEFT JOIN account as a"
-                  +" ON d.staff_id = a.id"
-                  +" WHERE (:status is null or d.status = :status) AND (d.date BETWEEN :startDate AND :endDate)"
-                  +" ORDER BY d.id DESC",
-                  resultSetMapping = "Mapping.PlayerNameDto")
-@SqlResultSetMapping(name = "Mapping.PlayerNameDto",
+
+@SqlResultSetMapping(name = "DataAssginDto",
                      classes = @ConstructorResult(targetClass = DataAssginDto.class,
                                                   columns = {@ColumnResult(name = "id"),
                                                              @ColumnResult(name = "country"),
@@ -31,6 +30,14 @@ import javax.persistence.ColumnResult;
                                                              @ColumnResult(name = "ward"),
                                                              @ColumnResult(name = "staffId"),
                                                              @ColumnResult(name = "staffName")}))
+@NamedNativeQuery(name = "find_DataAssgnDto",
+                    query = "SELECT d.*, a.username as staffName"
+                    +" FROM data as d"
+                    +" LEFT JOIN account as a"
+                    +" ON d.staff_id = a.id"
+                    +" WHERE (:status is null or d.status = :status) AND (d.date BETWEEN :startDate AND :endDate)"
+                    +" ORDER BY d.id DESC",
+                    resultSetMapping = "DataAssginDto")
 public class DataAssginDto {
     // private int id;
     // private String country;
