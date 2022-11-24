@@ -25,6 +25,8 @@ import { HeadersInterceptor } from "./headers.interceptor";
 import { ThemSuaXoaAccountComponent } from './shared/popup/them-sua-xoa-account/them-sua-xoa-account.component';
 import { GiaoViecPopUpComponent } from './shared/popup/giao-viec-pop-up/giao-viec-pop-up.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { TuDongGiaoViecComponent } from "./shared/popup/tu-dong-giao-viec/tu-dong-giao-viec.component";
+import { jqxGridModule } from "jqwidgets-ng/jqxgrid";
 
 
 @NgModule({
@@ -35,7 +37,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     TongKetDuLieuPopupComponent,
     LogiinComponent,
     ThemSuaXoaAccountComponent,
-    GiaoViecPopUpComponent
+    GiaoViecPopUpComponent,
+    TuDongGiaoViecComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -53,7 +56,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     jqxDateTimeInputModule,
     FormsModule,
     NgxWebstorageModule.forRoot({ prefix: '', separator: '' }),
-    NgSelectModule
+    NgSelectModule,
+    jqxGridModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: HeadersInterceptor, multi: true }

@@ -1,0 +1,27 @@
+
+<div class="modal-header">
+    <div style="font-size: 24px;">
+        <p class="m-0">Tự động giao việc</p>
+        <button class="btn btn-link" style="position: absolute;right: 0px;top: -7px;" (click)="dismiss()">x</button>
+      </div>
+</div>
+<div class="modal-body row">
+  <div class="col-12">
+    <label>Số lượng công việc chưa xử lý: {{listWork.length}}</label>
+  </div>
+  <div class="col-5">
+    <jqxGrid #gridNhanVien
+          [width]="'100%'" [source]="dataAdapter" [columns]="columns" [editable]="true" [height]="height"
+          [pageable]="true" [autorowheight]="true" [sortable]="true" 
+          [filterable]="true" [showfilterrow]="true"
+          [altrows]="true"  [enabletooltips]="true"  [selectionmode]="'checkbox'"
+          (onRowselect)="onRowSelect($event)"
+          >
+        </jqxGrid>
+  </div>
+  <div class="col-7"></div>
+</div>
+<div class="modal-footer">
+  <button (click)="assignWork()" type="" class="btn btn-primary">Lưu</button>
+  <button (click)="dismiss()" type="button" class="btn btn-danger" >Hủy</button>
+</div>

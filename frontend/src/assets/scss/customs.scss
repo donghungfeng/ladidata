@@ -34,8 +34,25 @@
 // grid
 .jqx-grid-column-header{
     font-weight: 600;
-    background: #e6f1f7;
+    background: #fff;
 }
-.jqx-grid-cell-filter-row{
-    background: #e6f1f7;
+.jqx-grid-cell-filter-row,.jqx-grid-pager,.jqx-grid-cell-alt,.jqx-grid-cell,.jqx-fill-state-pressed{
+    background: #fff;
+}
+.jqx-grid-cell-selected{
+    background-color: #d1d1d1 !important;
+    border-color: #999 !important;
+}
+
+// modal
+.modal-view {
+    .modal-dialog {
+      max-width: 1588px !important;
+      margin-top: 20px;
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+  }
+.modal-open .modal{
+z-index: 1100;
 }

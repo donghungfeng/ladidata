@@ -6,12 +6,12 @@ import { ConfirmationDialogService } from 'app/layouts/confirm-dialog/confirm-di
 import { NotificationService } from 'app/notification.service';
 import { GiaoViecPopUpComponent } from 'app/shared/popup/giao-viec-pop-up/giao-viec-pop-up.component';
 import { TongKetDuLieuPopupComponent } from 'app/shared/popup/tong-ket-du-lieu/TongKetDuLieuPopup.component';
+import { TuDongGiaoViecComponent } from 'app/shared/popup/tu-dong-giao-viec/tu-dong-giao-viec.component';
 import { XuLyDuLieuPopupComponent } from 'app/shared/popup/xu-ly-du-lieu/XuLyDuLieuPopup.component';
 import dayjs, { Dayjs } from 'dayjs/esm';
 
 import { jqxGridComponent } from 'jqwidgets-ng/jqxgrid';
 import * as moment from 'moment';
-import { Moment } from 'moment';
 import { DateRanges, TimePeriod } from 'ngx-daterangepicker-material/daterangepicker.component';
 import * as XLSX from 'xlsx';  
 
@@ -43,35 +43,23 @@ export class DataComponent implements OnInit, AfterViewInit{
     columns: any[] =
     [
         {
-            text: '#', sortable: false, filterable: false, editable: false,
+            text: '#', sortable: false, filterable: false, editable: false, width: (window.innerWidth - window.innerWidth * 0.94 - 32),
             groupable: false, draggable: false, resizable: false,
             datafield: '', columntype: 'number', 
             cellsrenderer: (row: number, column: any, value: number): string => {
-                return '<div style="margin: 4px;">' + (value + 1) + '</div>';
+                return '<div style="position: relative;top: 50%;left: 4px;transform: translateY(-50%);">' + (value + 1) + '</div>';
             }
         },
-        { text: 'Ngày', editable: false, datafield: 'ngay', width: '10%',align: 'center'},
-        { text: 'Tên KH', editable: false, datafield: 'name', width: '10%',align: 'center'},
-        { text: 'Sản phẩm',editable:false ,datafield: 'formcolor' , width: '10%',align: 'center'},
-        { text: 'SĐT', editable: false, datafield: 'phone' , width: '10%',align: 'center'},
-        { text: 'Địa chỉ', editable: false, datafield: 'street' , width: '10%',align: 'center'},
-        { text: 'Xã', editable: false, datafield: 'ward' , width: '8%',align: 'center'},
-        { text: 'Huyện', editable: false, datafield: 'district' ,  width: '8%',align: 'center'},
-        { text: 'Tỉnh', editable: false, datafield: 'state' ,  width: '8%',align: 'center'},
-        { 
-            text: 'Trạng thái', editable: false, datafield: 'status' ,  width: '10%',align: 'center',
-            filteritems: new jqx.dataAdapter(this.listStatus), displayfield: 'label',
-            createfilterwidget: (column: any, htmlElement: any, editor: any): void => {
-                editor.jqxDropDownList({ displayMember: 'label', valueMember: 'id' });
-            },
-            cellsrenderer: (row: number, column: any, value: number): string => {
-                if(value === 0)
-                {
-                    return '<div style="background-color:aqua;color:white; padding: 5px; width:100%; height:20px">Đang xử lý</div>'
-                }
-            }
-        },
-        { text: 'Nhân viên', editable: false, datafield: 'nhanvienid' ,  width: '10%',align: 'center'},
+        { text: 'Ngày', editable: false, datafield: 'ngay', width: '10%'},
+        { text: 'Tên KH', editable: false, datafield: 'name', width: '10%'},
+        { text: 'Sản phẩm',editable:false ,datafield: 'formcolor' , width: '10%'},
+        { text: 'SĐT', editable: false, datafield: 'phone' , width: '10%'},
+        { text: 'Địa chỉ', editable: false, datafield: 'street' , width: '10%'},
+        { text: 'Xã', editable: false, datafield: 'ward' , width: '8%'},
+        { text: 'Huyện', editable: false, datafield: 'district' ,  width: '8%'},
+        { text: 'Tỉnh', editable: false, datafield: 'state' ,  width: '8%'},
+        { text: 'Trạng thái', editable: false, datafield: 'trangThai' ,  width: '10%'},
+        { text: 'Nhân viên', editable: false, datafield: 'nhanvienid' ,  width: '10%'},
 
     ];
     height: any = $(window).height()! - 270;
@@ -115,7 +103,8 @@ export class DataComponent implements OnInit, AfterViewInit{
                 { name: 'date', type: 'date',format: "DD/MM/YYYY" },
                 { name: 'formcolor', type: 'string' },
                 { name: 'nhanvienid', type: 'number' },
-                { name: 'ngay', type: 'string' }
+                { name: 'ngay', type: 'string' },
+                { name: 'trangThai', type: 'string' }
             ],
             id:'id',
             datatype: 'array'
@@ -128,8 +117,7 @@ export class DataComponent implements OnInit, AfterViewInit{
           };
     }
 
-    ngOnInit(){
-        
+    ngOnInit(){ 
         this.loadData();
     }
 
@@ -154,7 +142,43 @@ export class DataComponent implements OnInit, AfterViewInit{
     customDate(list: any[]): any[] {
         list.forEach(unitItem => {
             unitItem.ngay = unitItem.date? moment(unitItem.date, 'X').format('DD/MM/YYYY HH:mm:ss'):null;
-          
+            switch (unitItem.status){
+                case 0: 
+                {
+                    unitItem.trangThai = 'Chờ xử lý';
+                    break;
+                }
+                case 1: 
+                {
+                    unitItem.trangThai = 'Đang xử lý';
+                    break;
+                }
+                case 2: 
+                {
+                    unitItem.trangThai = 'Hoàn thành';
+                    break;
+                }
+                case 3: 
+                {
+                    unitItem.trangThai = 'Delay';
+                    break;
+                }
+                case 4: 
+                {
+                    unitItem.trangThai = 'Hủy';
+                    break;
+                }
+                case 5: 
+                {
+                    unitItem.trangThai = 'Gửi giao hàng';
+                    break;
+                }
+                default:
+                {
+                    unitItem.trangThai = '';
+                    break;
+                }
+            }
         });
         return list;
       }
@@ -176,6 +200,16 @@ export class DataComponent implements OnInit, AfterViewInit{
             modalRef.componentInstance.data = this.listWork;
         }
         else this.notificationService.showError('Vui lòng chọn công việc',"Thông báo lỗi!");
+    }
+
+    openAutoAssignWork():void{
+        const modalRef = this.modalService.open(TuDongGiaoViecComponent, { windowClass: 'modal-view',keyboard: true });
+        modalRef.result.then(
+            () => {
+              this.loadData();
+            },
+            () => {}
+          );
     }
 
     public onProcessData(event:any):void{
