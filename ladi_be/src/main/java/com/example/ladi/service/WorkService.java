@@ -8,7 +8,7 @@ import com.example.ladi.model.Work;
 
 public interface WorkService extends BaseService<Work> {
     public BaseResponse createWork(CreateWorkRequest createWorkRequest);
-    public BaseResponse getAllWork(String jwt);
+    public BaseResponse getAllWork(String jwt, String startDate, String endDate);
     public BaseResponse checkOut(CheckOutRequest checkOutRequest);
     public BaseResponse getAllActive();
     public BaseResponse checkWorkActive(CheckWorkActiveRequest checkWorkActive);

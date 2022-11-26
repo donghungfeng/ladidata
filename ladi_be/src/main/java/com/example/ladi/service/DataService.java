@@ -12,8 +12,6 @@ import java.util.List;
 
 public interface DataService extends BaseService<Data> {
 
-    public List<Data> getByStatus(Integer status, String startDate, String endDate);
-    public List<Data> getByDate(String startDate, String endDate);
-    public BaseResponse assignWork(AssignJobRequest request);
-    public BaseResponse getAllData(String jwt);
+    public BaseResponse getAllData(String jwt, String status, String startDate, String endDate);
+    public BaseResponse createData(Data data);
 }

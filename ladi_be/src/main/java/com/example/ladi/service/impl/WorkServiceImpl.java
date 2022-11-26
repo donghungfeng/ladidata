@@ -11,6 +11,7 @@ import com.example.ladi.model.Account;
 import com.example.ladi.model.Work;
 import com.example.ladi.repository.AccountRepository;
 import com.example.ladi.repository.BaseRepository;
+import com.example.ladi.repository.CustomWorkRepository;
 import com.example.ladi.repository.WorkRepository;
 import com.example.ladi.service.WorkService;
 import org.modelmapper.ModelMapper;
@@ -32,6 +33,9 @@ public class WorkServiceImpl extends BaseServiceImpl<Work> implements WorkServic
     @Autowired
     ModelMapper modelMapper;
 
+    @Autowired
+    CustomWorkRepository customWorkRepository;
+
     @Override
     protected BaseRepository<Work> getRepository() {
         return workRepository;
@@ -49,14 +53,14 @@ public class WorkServiceImpl extends BaseServiceImpl<Work> implements WorkServic
     }
 
     @Override
-    public BaseResponse getAllWork(String jwt) {
+    public BaseResponse getAllWork(String jwt, String startDate, String endDate) {
         JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
         String bearerToken = getJwtFromRequest(jwt);
         String userName = jwtTokenProvider.getAccountUserNameFromJWT(bearerToken);
         Account account = accountRepository.findByUserName(userName);
         List<WorkDto> workDtoList = new ArrayList<>();
         if (account.getRole().equals("admin")){
-            List<Work> workList = workRepository.findAllByOrderByIdDesc();
+            List<Work> workList = customWorkRepository.finWorkByConditions(startDate, endDate, null);
             for (int i = 0; i<workList.size(); i++){
                 AccountDto accountDto = modelMapper.map(workList.get(i).getAccount(), AccountDto.class);
                 WorkDto workDto = modelMapper.map(workList.get(i),WorkDto.class);
@@ -65,7 +69,7 @@ public class WorkServiceImpl extends BaseServiceImpl<Work> implements WorkServic
             }
         }
         else{
-            List<Work> workList = workRepository.findAllByAccount(account);
+            List<Work> workList = customWorkRepository.finWorkByConditions(startDate, endDate, account);
             for (int i = 0 ; i<workList.size(); i++){
                 AccountDto accountDto = modelMapper.map(workList.get(i).getAccount(),AccountDto.class);
                 WorkDto workDto = modelMapper.map(workList.get(i),WorkDto.class);

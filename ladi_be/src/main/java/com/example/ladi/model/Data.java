@@ -47,7 +47,7 @@ public class Data {
     private  int status;
 
     @Column(name = "date")
-    private String date;
+    private Long date;
 
     @Column(name = "source")
     private String source;
@@ -58,9 +58,26 @@ public class Data {
     @Column(name = "datechanged")
     private String dateChanged;
 
-    @JsonProperty("nhanvienid")
-    @Column(name = "staffId")
-    private Integer staffId;
+    @Column(name = "utm_source")
+    private String utmSource;
+
+    @Column(name = "utm_medium")
+    private String utmMedium;
+
+    @Column(name = "utm_campaign")
+    private String utmCampation;
+
+    @Column(name = "utm_term")
+    private String utmTerm;
+
+    @Column(name = "utm_content")
+    private String utmContent;
+
+    @Column(name = "variant_url ")
+    private String variantUrl;
+
+    @Column(name = "price")
+    private Double price;
 
     @ManyToOne
     @JoinColumn(name = "nhanvienid")
