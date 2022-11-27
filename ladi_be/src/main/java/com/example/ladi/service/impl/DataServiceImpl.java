@@ -89,7 +89,7 @@ public class DataServiceImpl extends BaseServiceImpl<Data> implements DataServic
         dataRepository.save(data);
         return new BaseResponse(200, "OK", data);
     }
-
+    
     @Override
     public BaseResponse assignWork(AssignJobRequest assignJobRequest) {
         for (DataRequest data : assignJobRequest.getDataList()){
