@@ -12,4 +12,5 @@ public interface WorkService extends BaseService<Work> {
     public BaseResponse checkOut(CheckOutRequest checkOutRequest);
     public BaseResponse getAllActive();
     public BaseResponse checkWorkActive(CheckWorkActiveRequest checkWorkActive);
+    public BaseResponse infoCheckout(int id);
 }

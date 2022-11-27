@@ -7,6 +7,7 @@ import com.example.ladi.model.QData;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -34,7 +35,7 @@ public class CustomDateRepositoryImpl implements CustomDataRepository{
         if (account != null) {
             filter.and(qData.account.eq(account));
         }
-        List<Data> dataList = queryData.from(qData).where(filter).fetch();
+        List<Data> dataList = queryData.from(qData).where(filter).orderBy(qData.id.desc()).fetch();
         System.out.println(dataList);
         return dataList;
     }

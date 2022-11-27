@@ -13,7 +13,7 @@ public class DataRequest {
     private String street;
     private String country;
 
-    public DataRequest(int id, String phone, String name, String street, String country, String state, String district, String ward, String formColor, int status, String date, String source, String ipAddress, String dateChanged, String staffName, int nhanVienId) {
+    public DataRequest(int id, String phone, String name, String street, String country, String state, String district, String ward, String formcolor, int status, String date, String source, String ipAddress, String dateChanged, String staffName, int nhanVienId, Double price) {
         this.id = id;
         this.phone = phone;
         this.name = name;
@@ -22,7 +22,7 @@ public class DataRequest {
         this.state = state;
         this.district = district;
         this.ward = ward;
-        this.formColor = formColor;
+        this.formcolor = formcolor;
         this.status = status;
         this.date = date;
         this.source = source;
@@ -30,12 +30,13 @@ public class DataRequest {
         this.dateChanged = dateChanged;
         this.staffName = staffName;
         this.nhanVienId = nhanVienId;
+        this.price = price;
     }
 
     private String state;
     private String district;
     private String ward;
-    private String formColor;
+    private String formcolor;
     private int status;
     private String date;
     private String source;
@@ -43,6 +44,15 @@ public class DataRequest {
     private String dateChanged;
     private String staffName;
     private int nhanVienId;
+    private Double price;
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
 
     public DataRequest() {
     }
@@ -111,12 +121,12 @@ public class DataRequest {
         this.ward = ward;
     }
 
-    public String getFormColor() {
-        return formColor;
+    public String getFormcolor() {
+        return formcolor;
     }
 
-    public void setFormColor(String formColor) {
-        this.formColor = formColor;
+    public void setFormcolor(String formcolor) {
+        this.formcolor = formcolor;
     }
 
     public int getStatus() {

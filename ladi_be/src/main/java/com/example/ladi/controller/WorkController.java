@@ -46,4 +46,10 @@ public class WorkController extends BaseController<Work>{
     public BaseResponse getAllIsActive(@RequestBody CheckWorkActiveRequest checkWorkActiveRequest){
         return workService.checkWorkActive(checkWorkActiveRequest);
     }
+
+    @PostMapping("infoCheckout")
+    public BaseResponse infoCheckout(@RequestParam int id){
+//        return new BaseResponse(200, "Ok", "hello");
+        return workService.infoCheckout(id);
+    }
 }

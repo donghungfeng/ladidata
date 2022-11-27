@@ -26,6 +26,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.logging.SimpleFormatter;
 
 @Service
@@ -67,7 +68,7 @@ public class DataServiceImpl extends BaseServiceImpl<Data> implements DataServic
                     dataDtoList.add(dataDto);
                 }
             }
-            return new BaseResponse(200, "OK", dataList);
+            return new BaseResponse(200, "OK", dataDtoList);
         }else {
             List<Data> dataList = customDataRepository.finDataByConditions(status, startDate, endDate, account);
             for (int i = 0; i<dataList.size(); i++){
@@ -84,6 +85,7 @@ public class DataServiceImpl extends BaseServiceImpl<Data> implements DataServic
     public BaseResponse createData(Data data) {
         Date nowDate = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT+7"));
         Long date = Long.parseLong(formatter.format(nowDate));
         data.setDate(date);
         dataRepository.save(data);

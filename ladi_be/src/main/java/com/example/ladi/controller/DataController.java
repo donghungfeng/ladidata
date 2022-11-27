@@ -49,7 +49,7 @@ public class DataController extends BaseController<Data>{
         return dataService.getAllData(jwt, status, startDate, endDate);
     }
 
-    @PostMapping("")
+    @PostMapping("createData")
     public BaseResponse createData(@RequestBody Data data){
         return dataService.createData(data);
     }

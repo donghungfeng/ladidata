@@ -8,19 +8,20 @@ import com.example.ladi.controller.request.CreateWorkRequest;
 import com.example.ladi.dto.AccountDto;
 import com.example.ladi.dto.WorkDto;
 import com.example.ladi.model.Account;
+import com.example.ladi.model.Data;
 import com.example.ladi.model.Work;
-import com.example.ladi.repository.AccountRepository;
-import com.example.ladi.repository.BaseRepository;
-import com.example.ladi.repository.CustomWorkRepository;
-import com.example.ladi.repository.WorkRepository;
+import com.example.ladi.repository.*;
 import com.example.ladi.service.WorkService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 @Service
 public class WorkServiceImpl extends BaseServiceImpl<Work> implements WorkService {
@@ -35,6 +36,9 @@ public class WorkServiceImpl extends BaseServiceImpl<Work> implements WorkServic
 
     @Autowired
     CustomWorkRepository customWorkRepository;
+
+    @Autowired
+    CustomDataRepository customDataRepository;
 
     @Override
     protected BaseRepository<Work> getRepository() {
@@ -87,9 +91,14 @@ public class WorkServiceImpl extends BaseServiceImpl<Work> implements WorkServic
         if (work == null){
             return new BaseResponse(500, "Work not found", "Checkout Fail");
         }
-        if (checkOutRequest.getTimeOut() != 0){
-            work.setTimeOut(checkOutRequest.getTimeOut());
+        List<Data> dataList = customDataRepository.finDataByConditions("0,1,2,3,4,5,6,7", String.valueOf(work.getTimeIn()), String.valueOf(checkOutRequest.getTimeOut()), work.getAccount());
+        for (int i = 0; i<dataList.size(); i++){
+            if (dataList.get(i).getStatus() == 1){
+                dataList.get(i).setStatus(0);
+            }
+            dataList.get(i).setAccount(null);
         }
+        work.setTimeOut(checkOutRequest.getTimeOut());
         work.setDonGiao(checkOutRequest.getDonGiao());
         work.setDonHoanThanh(checkOutRequest.getDonHoanThanh());
         work.setIsActive(-1);
@@ -121,6 +130,26 @@ public class WorkServiceImpl extends BaseServiceImpl<Work> implements WorkServic
         }
         AccountDto accountDto = new AccountDto(account.getId(), account.getUserName(), account.getFullName());
         WorkDto workDto = new WorkDto(work.getId(), work.getTimeIn(), work.getTimeOut(), work.getDonGiao(), work.getDonHoanThanh(), work.getGhiChu(), accountDto);
+        return new BaseResponse(200, "OK", workDto);
+    }
+
+    @Override
+    public BaseResponse infoCheckout(int id) {
+        Date nowDate = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT+7"));
+        Long date = Long.parseLong(formatter.format(nowDate));
+        Work work = workRepository.findById(id).get();
+        Long startDate = work.getTimeIn();
+        Long endDate = date;
+        int donGiao = customDataRepository.finDataByConditions("0,1,2,3,4,5,6,7", String.valueOf(startDate), String.valueOf(endDate), work.getAccount()).size();
+        int donHoanThanh = customDataRepository.finDataByConditions("2", String.valueOf(startDate), String.valueOf(endDate), work.getAccount()).size();
+        work.setDonGiao(donGiao);
+        work.setDonHoanThanh(donHoanThanh);
+        work.setTimeOut(endDate);
+        AccountDto accountDto = modelMapper.map(work.getAccount(), AccountDto.class);
+        WorkDto workDto = modelMapper.map(work, WorkDto.class);
+        workDto.setAcount(accountDto);
         return new BaseResponse(200, "OK", workDto);
     }
 

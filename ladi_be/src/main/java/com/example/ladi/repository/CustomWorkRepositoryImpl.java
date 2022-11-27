@@ -37,7 +37,7 @@ public class CustomWorkRepositoryImpl implements CustomWorkRepository{
         if (account != null) {
             filter.and(qWork.account.eq(account));
         }
-        List<Work> workList = workQuery.from(qWork).where(filter).fetch();
+        List<Work> workList = workQuery.from(qWork).where(filter).orderBy(qWork.id.desc()).fetch();
         return workList;
     }
 }

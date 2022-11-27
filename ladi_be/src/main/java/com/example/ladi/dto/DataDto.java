@@ -18,12 +18,13 @@ public class DataDto {
     private String state;
     private String district;
     private String ward;
-    private String formColor;
+    private String formcolor;
     private int status;
     private String date;
     private String source;
     private String ipAddress;
     private String dateChanged;
     private String staffName;
+    private Double price;
     private AccountDto account;
 }
