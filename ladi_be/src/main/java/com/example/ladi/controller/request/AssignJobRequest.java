@@ -9,11 +9,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 public class AssignJobRequest {
-    public Integer staffId;
-    public List<Data> data;
+    public List<DataRequest> dataList;
+
+    public AssignJobRequest() {
+    }
+
+    public AssignJobRequest(List<DataRequest> dataList) {
+        this.dataList = dataList;
+    }
+
+    public List<DataRequest> getDataList() {
+        return dataList;
+    }
+
+    public void setDataList(List<DataRequest> dataList) {
+        this.dataList = dataList;
+    }
 }

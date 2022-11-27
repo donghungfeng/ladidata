@@ -3,6 +3,7 @@ package com.example.ladi.controller;
 import com.example.ladi.configurations.jdbc.JDBCConnection;
 import com.example.ladi.controller.reponse.BaseResponse;
 import com.example.ladi.controller.request.AssignJobRequest;
+import com.example.ladi.controller.request.AssignWorkRequest;
 import com.example.ladi.dto.DataDto;
 import com.example.ladi.extentions.datetimeExtention;
 import com.example.ladi.model.Data;
@@ -49,16 +50,13 @@ public class DataController extends BaseController<Data>{
     }
 
     @PostMapping("")
-    public BaseResponse createData(@RequestBody  Data data){
+    public BaseResponse createData(@RequestBody Data data){
         return dataService.createData(data);
     }
 
-    @GetMapping("test")
-    public BaseResponse getTest(){
-        return new BaseResponse(200, "OK", customDataRepository.finDataByConditions("0", "0", "202311119999999", null));
+    @PostMapping("assignWork")
+    public BaseResponse assignWork(@RequestBody AssignJobRequest assignJobRequest){
+        return dataService.assignWork(assignJobRequest);
     }
-
-
-
 
 }

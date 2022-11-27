@@ -24,7 +24,6 @@ public class DataDto {
     private String source;
     private String ipAddress;
     private String dateChanged;
-    private int nhanVienId;
     private String staffName;
     private AccountDto account;
 }
