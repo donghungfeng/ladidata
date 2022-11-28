@@ -5,21 +5,25 @@
       <div class="card-header">
         <!-- <h4 class="card-title"> Kiện hàng bom</h4> -->
         <div class="row">
-          <div class="col-8">
-            <!-- <button type="" class="btn btn-primary" (click)="CreateData()">Thêm</button>
-            <button type="" class="btn btn-primary" (click)="UpdateData()">Sửa</button>
-            <button type="" class="btn btn-warning" (click)="DeleteData()">Xóa</button> -->
-            
-          </div>
           <div class="col-4">
-            <button type="" class="btn btn-primary" (click)="loadData()" style="float:right">Làm mới</button>
+            <input class="form-control pl-3" style="margin-top: 10px" type="text" ngxDaterangepickerMd 
+            [(ngModel)]="dateRange" 
+            [ranges]="ranges" 
+            [showCustomRangeLabel]="true"
+            (ngModelChange)="loadData()"/>
+          </div>
+          <div class="col-8 text-right" >
+            <button type="" class="btn btn-info" (click)="createData()">Thêm</button>
+            <button type="" class="btn btn-info" (click)="updateData()">Sửa</button>
+            <button type="" class="btn btn-info" (click)="deleteData()">Xóa</button>
+            <button type="" class="btn btn-info" (click)="reLoad()">Làm mới</button>
           </div>
         </div>
       </div>
       <div class="card-body">
           <jqxGrid #gridReference
           [width]="'100%'" [source]="dataAdapter" [columns]="columns" [editable]="true"
-          [pageable]="true" [autoheight]="true" [autorowheight]="true" [sortable]="true" 
+          [pageable]="true" [height]="height" [autorowheight]="true" [sortable]="true" 
           [filterable]="true" [showfilterrow]="true"
           [altrows]="true"  [enabletooltips]="true"
           (onRowselect)="onRowSelect($event)"

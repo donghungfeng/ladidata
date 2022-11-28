@@ -8,17 +8,8 @@
 <div class="modal-body">
   <div class="mt-2 mb-2">
     <h6>Chọn nhân sự</h6>
-    <select (change)="setStaffId($event.target.value)" class="form-control" *ngFor="let obj of listUser">
-        <option [value]="0">--Chọn nhân sự--</option>
-        <option [value]="obj.acount.id">{{obj.acount.userName}}</option>
-    </select>
     <ng-select [(ngModel)]="selectedStaff">
-      <ng-option *ngFor="let obj of listUser" [value]="obj.acount.id">{{obj.acount.userName}}</ng-option>
-    </ng-select>
-    <ng-select [items]="listUser" 
-           bindLabel="obj.acount.userName" 
-           bindValue="obj.acount.id" 
-           [(ngModel)]="selectedStaff">
+      <ng-option *ngFor="let obj of listUser" [value]="obj.acount.id">{{obj.acount.fullName}} ({{obj.acount.userName}})</ng-option>
     </ng-select>
   </div>
   <div class="mt-2 mb-2">

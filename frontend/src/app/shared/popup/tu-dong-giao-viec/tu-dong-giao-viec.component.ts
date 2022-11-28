@@ -5,6 +5,7 @@ import { DanhMucService } from 'app/danhmuc.service';
 import { NotificationService } from 'app/notification.service';
 import DateUtil from 'app/shared/util/date.util';
 import { jqxGridComponent } from 'jqwidgets-ng/jqxgrid';
+import moment from 'moment';
 import { userInfo } from 'os';
 @Component({
   selector: 'app-tu-dong-giao-viec',
@@ -77,48 +78,17 @@ export class TuDongGiaoViecComponent implements OnInit, OnDestroy, AfterViewInit
   getUserActive() {
     this.service.getOption(null, this.REQUEST_WORK_URL,"/getAllActive").subscribe(
         (res: HttpResponse<any>) => {
-          this.listUser = this.customData(res.body.RESULT);
+          this.listUser = res.body.RESULT;
           this.source.localdata = this.listUser;
           this.dataAdapter = new jqx.dataAdapter(this.source);
           setTimeout(() => {
             this.myGrid.selectallrows();
-          }, 200);
+          }, 500);
         },
         (error: any) => {
           this.notificationService.showError(`${error.body.RESULT.message}`,"Thông báo lỗi!");
         }
       );
-  }
-  customData(list: any[]): any[] {
-    if(this.listWork.length > 0){
-      const phanDu = this.listWork.length % list.length;
-      const phanNguyen = Math.floor(this.listWork.length / list.length);
-        if(phanDu === 0){
-          list.forEach((unitItem) => {
-            unitItem.ten = unitItem.acount? unitItem.acount.userName:null;
-            unitItem.tenDayDu = unitItem.acount? unitItem.acount.fullName:null;
-            unitItem.thoiGianVao = unitItem.timeIn? DateUtil.formatDate(unitItem.timeIn):null;
-            unitItem.soLuongCV = phanNguyen
-          });
-          return list;
-        }else{
-          list.forEach((unitItem,index) => {          
-              unitItem.ten = unitItem.acount? unitItem.acount.userName:null;
-              unitItem.tenDayDu = unitItem.acount? unitItem.acount.fullName:null;
-              unitItem.thoiGianVao = unitItem.timeIn? DateUtil.formatDate(unitItem.timeIn):null;
-              unitItem.soLuongCV = (index === (list.length - 1))? phanDu :phanNguyen;
-          });
-          return list;
-        }
-    }else{
-      list.forEach(unitItem => {
-          unitItem.ten = unitItem.acount? unitItem.acount.userName:null;
-          unitItem.tenDayDu = unitItem.acount? unitItem.acount.fullName:null;
-          unitItem.thoiGianVao = unitItem.timeIn? DateUtil.formatDate(unitItem.timeIn):null;
-          unitItem.soLuongCV = 0;
-      });
-      return list;
-    }
   }
 
   customDataSelect(list: any[]): any[] {
@@ -126,15 +96,21 @@ export class TuDongGiaoViecComponent implements OnInit, OnDestroy, AfterViewInit
      const listcheck = this.myGrid.getselectedrowindexes();
       const phanDu = this.listWork.length % count;
       const phanNguyen = Math.floor(this.listWork.length / count);
-      if(this.listWork.length > count){
+      if(this.listWork.length >= count){
         if(phanDu === 0){
           list.forEach((unitItem,index) => {
+            unitItem.ten = unitItem.acount? unitItem.acount.userName:null;
+            unitItem.tenDayDu = unitItem.acount? unitItem.acount.fullName:null;
+            unitItem.thoiGianVao = unitItem.timeIn? DateUtil.formatDate(unitItem.timeIn):null;
             unitItem.soLuongCV = listcheck.includes(index)?phanNguyen:null;
           });
           return list;
         }else{
           let countListCheck = count;
           list.forEach((unitItem,index) => {
+            unitItem.ten = unitItem.acount? unitItem.acount.userName:null;
+            unitItem.tenDayDu = unitItem.acount? unitItem.acount.fullName:null;
+            unitItem.thoiGianVao = unitItem.timeIn? DateUtil.formatDate(unitItem.timeIn):null;
             if(listcheck.includes(index)){
               countListCheck--;
               unitItem.soLuongCV = (countListCheck === 0)?(phanNguyen + phanDu):phanNguyen;
@@ -146,11 +122,18 @@ export class TuDongGiaoViecComponent implements OnInit, OnDestroy, AfterViewInit
         }
         
       }else{
+        let countListCheck = count
         list.forEach((unitItem,index) => {
-          let countListCheck = count;
+          unitItem.ten = unitItem.acount? unitItem.acount.userName:null;
+          unitItem.tenDayDu = unitItem.acount? unitItem.acount.fullName:null;
+          unitItem.thoiGianVao = unitItem.timeIn? DateUtil.formatDate(unitItem.timeIn):null;
           if(listcheck.includes(index)){
-              unitItem.soLuongCV = countListCheck === count ? phanDu : null;
-              countListCheck --
+            countListCheck --;
+            if(countListCheck === 0){
+              unitItem.soLuongCV = phanDu;
+            }else{
+              unitItem.soLuongCV = 0;
+            }
           }else{
             unitItem.soLuongCV = null;
           }
@@ -160,10 +143,14 @@ export class TuDongGiaoViecComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   getWorks():void{
-    this.service.getOption(null, this.REQUEST_DATA_URL,`/getByStatus?status=0&startDate=0&endDate=999999999999`).subscribe(
+    this.service.getOption(null, this.REQUEST_DATA_URL,`?status=0&startDate=0&endDate=99999999999999`).subscribe(
       (res: HttpResponse<any>) => {
           this.listWork = res.body.RESULT;
-          this.getUserActive();
+          if(this.listWork.length === 0){
+            this.notificationService.showWarning('Danh sách công việc null','Cảnh báo!');
+          }else{
+            this.getUserActive();
+          }
       },
       (error: HttpResponse<any>) => {
           this.notificationService.showError(`${error.body.RESULT.message}`,"Thông báo lỗi!");
@@ -194,41 +181,9 @@ export class TuDongGiaoViecComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   public assignWork():void {
-    // if(this.staffId <=0 || this.staffId == undefined) {
-    //   this.notificationService.showError('Vui lòng chọn nhân sự',"Thông báo lỗi!");
-    // }
-
-    // let obj  = {
-    //   staffId: this.staffId,
-    //   data: this.data
-    // }
-
-    // this.service.postOption(obj, this.REQUEST_DATA_URL, "/assignWork").subscribe(
-    //   (res: HttpResponse<any>) => {
-    //     this.activeModal.dismiss();
-    //     this.notificationService.showSuccess(`${res.body.MESSAGE}`,"Thông báo!");
-    //   },
-    //   (error: any) => {
-    //     this.notificationService.showError(`${error.body.MESSAGE}`,"Thông báo lỗi!");
-    //   }
-    // );
-
-    // const entity = [];
-    // let count = 0;
-    // for(let i = 0; i < this.listUser.length; i++){
-    //   if(this.listUser[i].soLuongCV){
-    //     const item = {
-    //       staffId: this.listUser[i].id,
-    //       data: this.listWork.slice(count,count + this.listUser[i].soLuongCV)
-    //     }
-    //     entity.push(item);
-    //     count = count + this.listUser[i].soLuongCV
-    //   }
-    // }
-    // console.log(entity);
     const checkIndex = this.myGrid.getselectedrowindexes();
     if(checkIndex.length === 0){
-      this.notificationService.showWarning('Vui lòng chọn ít nhất một tài khoản','')
+      this.notificationService.showWarning('Vui lòng chọn ít nhất một tài khoản','Cảnh báo!')
     }
     const listCheck = [];
     for(let i = 0; i< this.listUser.length; i++){
@@ -242,11 +197,15 @@ export class TuDongGiaoViecComponent implements OnInit, OnDestroy, AfterViewInit
     let countCV = phanNguyen;
     if(phanNguyen === 0){
       this.listWork.forEach((unitItem) => {
-        unitItem.nhanvienid = listCheck[listCheck.length - 1].id;
+        unitItem.nhanVienId = listCheck[listCheck.length - 1].acount.id;
+        unitItem.date = moment(new Date()).format('YYYYMMDDHHmmss')
+        unitItem.status = 1;
       });
     }else{
       this.listWork.forEach((unitItem,index) => {
-        unitItem.nhanvienid = listCheck[countTK].id;
+        unitItem.nhanVienId = listCheck[countTK].acount.id;
+        unitItem.date = moment(new Date()).format('YYYYMMDDHHmmss')
+        unitItem.status = 1;
         if(index === (countCV-1)){
           countCV = countCV + phanNguyen;
           if(countTK !== (length - 1)){
@@ -255,6 +214,21 @@ export class TuDongGiaoViecComponent implements OnInit, OnDestroy, AfterViewInit
         }
       });
     }
-    console.log(this.listWork);
+    this.save(this.listWork);
+  }
+  save(list:any):void{
+    const entity ={
+      dataList: list
+    }
+    this.service.postOption(entity, this.REQUEST_DATA_URL, "/assignWork").subscribe(
+      (res: HttpResponse<any>) => {
+        this.activeModal.close();
+        this.notificationService.showSuccess(`${res.body.MESSAGE}`,"Thông báo!");
+      },
+      (error: any) => {
+        this.notificationService.showError(`${error.body.MESSAGE}`,"Thông báo lỗi!");
+      }
+    );
+
   }
 }
